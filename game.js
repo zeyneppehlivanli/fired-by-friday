@@ -341,6 +341,24 @@ class MainScene extends Phaser.Scene {
         });
 
         this.productSpeed = 2; 
+        // --- YENİ: KAHVE MAKİNESİ PASİF İYİLEŞME SİSTEMİ ---
+        this.time.addEvent({
+            delay: 5000, // Her 5 saniyede bir çalışır
+            callback: () => {
+                if (this.gameStarted && !this.isPaused && !this.isGameOver) {
+                    if (this.upgrades.coffee.level > 0 && this.sanity < 100) {
+                        // Level başına 2 Akıl Sağlığı doldur (Lvl 3 ise +6 doldurur)
+                        const healAmount = this.upgrades.coffee.level * 2;
+                        this.sanity = Math.min(100, this.sanity + healAmount);
+                        this.updateResourceBars();
+                        
+                        // Ekrandan uçuşan tatlı bir bildirim
+                        this.showFloatingText(this.scale.width / 2 + 250, 70, `+${healAmount} ☕`, '#3498db');
+                    }
+                }
+            },
+            loop: true
+        });
 
         const barWidth = 200;
         const barHeight = 20;
