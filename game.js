@@ -1364,7 +1364,7 @@ class MainScene extends Phaser.Scene {
 const config = {
     type: Phaser.AUTO,
     scale: {
-        mode: Phaser.Scale.FIT,
+        mode: Phaser.Scale.FIT, // Esnemeyi iptal ettik, orijinal kaliteye döndük
         autoCenter: Phaser.Scale.CENTER_BOTH,
         width: 1280,
         height: 720
