@@ -5,8 +5,8 @@ const TEXTS = {
         sanity: "AKIL SAĞLIĞI: ",
         produced: "Üretilen Ürün: ",
         queue: "Kuyruk: ",
-        goal: "HEDEF: 10000",
-        flowStateGoal: "HEDEF: 10000 (🔥 FLOW STATE 🔥)",
+        goal: "HEDEF: 5000",
+        flowStateGoal: "HEDEF: 5000 (🔥 FLOW STATE 🔥)",
         flowStatus: "AKIŞ DURUMU (FLOW)",
         upgradesTitle: "GELİŞTİRMELER (UPGRADES)",
         m3Upgrade: "M-3 Turbo",
@@ -27,12 +27,12 @@ const TEXTS = {
         statusCrisisNear: "⚠️ KRİZ YAKIN",
         statusBroken: "💥 ARIZALI",
         bottleneckWarning: "⚠️ DARBOĞAZ",
-        manualBonus: "🗑️ ÇÖPE GİTTİ",
+        manualBonus: "⚡ MANUEL",
         repairCost: "-100$ (Tamir)",
         flowBonus: "🔥 FLOW STATE! Ürünler +75$ 🔥",
         flowBroken: "❌ Akış Bozuldu...",
         tutorialTitle: "⚡ YENİ YETENEK: OVERDRIVE",
-        tutorialBody: "Makine tıkanmak üzere! Kriz çıkmadan önce makineye (üzerine) tıklayarak kutuları MANUEL olarak çöpe atabilirsin.\n\nKAZANIM: Kriz önlenir (Para kazandırmaz!)\nBEDEL: -2 Akıl Sağlığı (Yorulursun!)\n\nAkıl sağlığını sıfırlamadan krizleri önlemek için bu gücü dikkatli kullan!",
+        tutorialBody: "Makine tıkanmak üzere! Kriz çıkmadan önce makineye (üzerine) tıklayarak kutuları MANUEL olarak eritebilirsin.\n\nKAZANIM: Anında +50$ Bütçe\nBEDEL: -2 Akıl Sağlığı (Yorulursun!)\n\nAkıl sağlığını sıfırlamadan krizleri önlemek için bu gücü dikkatli kullan!",
         understood: "ANLADIM",
         crisisTitle: "KRİZ: ÜRETİM HATTI TIKANDI!",
         callMaster: "Usta Çağır (-500 Bütçe)",
@@ -59,8 +59,8 @@ const TEXTS = {
         sanity: "SANITY: ",
         produced: "Produced: ",
         queue: "Queue: ",
-        goal: "GOAL: 10000",
-        flowStateGoal: "GOAL: 10000 (🔥 FLOW STATE 🔥)",
+        goal: "GOAL: 5000",
+        flowStateGoal: "GOAL: 5000 (🔥 FLOW STATE 🔥)",
         flowStatus: "FLOW STATE",
         upgradesTitle: "UPGRADES",
         m3Upgrade: "M-3 Turbo",
@@ -81,12 +81,12 @@ const TEXTS = {
         statusCrisisNear: "⚠️ CRISIS NEAR",
         statusBroken: "💥 BROKEN",
         bottleneckWarning: "⚠️ BOTTLENECK",
-        manualBonus: "🗑️ TRASHED",
+        manualBonus: "⚡ MANUAL",
         repairCost: "-100$ (Repair)",
         flowBonus: "🔥 FLOW STATE! Products +$75 🔥",
         flowBroken: "❌ Flow Broken...",
         tutorialTitle: "⚡ NEW SKILL: OVERDRIVE",
-        tutorialBody: "The machine is about to jam! Before a crisis hits, you can click on the machine to MANUALLY destroy the boxes.\n\nREWARD: Crisis prevented (No money earned!)\nCOST: -2 Sanity (It's exhausting!)\n\nUse this power carefully to prevent crises without draining your sanity to zero!",
+        tutorialBody: "The machine is about to jam! Before a crisis hits, you can click on the machine to MANUALLY melt away the boxes.\n\nREWARD: Instant +$50 Budget\nCOST: -2 Sanity (It's exhausting!)\n\nUse this power carefully to prevent crises without draining your sanity to zero!",
         understood: "GOT IT",
         crisisTitle: "CRISIS: PRODUCTION LINE JAMMED!",
         callMaster: "Call Mechanic (-500 Budget)",
@@ -272,12 +272,16 @@ class MainScene extends Phaser.Scene {
                     const product = machineData.queue.shift();
                     product.destroy(); 
                     
-                    // YENİ: Artık manuel tıklama para vermiyor, ürünü çöpe atıyor!
-                    this.showFloatingText(pos.x, pos.y - 50, this.t('manualBonus'), '#e74c3c');
+                    const salePrice = this.isFlowState ? 75 : 50;
+                    this.budget += salePrice;
+                    this.productCount++;
+                    this.scoreText.setText(`${this.t('produced')}${this.productCount}`);
+                    
+                    this.showFloatingText(pos.x, pos.y - 50, `${this.t('manualBonus')} (+${salePrice}$)`, '#e67e22');
                     this.playSound('thud');
                     
                     this.cameras.main.shake(50, 0.002);
-                    machine.setFillStyle(0xe74c3c); // Rengi turuncudan kırmızıya (çöp) çektik
+                    machine.setFillStyle(0xe67e22);
                     this.time.delayedCall(100, () => machine.setFillStyle(0x2c3e50));
                 }
             });
@@ -331,7 +335,6 @@ class MainScene extends Phaser.Scene {
 
         this.productSpeed = 2; 
 
-        // Kahve makinesi pasif iyileşmesi
         this.time.addEvent({
             delay: 5000,
             callback: () => {
@@ -631,6 +634,74 @@ class MainScene extends Phaser.Scene {
         this.playSound('click');
     }
 
+    showPatronQuote() {
+        const width = this.scale.width;
+        const height = this.scale.height;
+
+        if (this.patronContainer) {
+            this.patronContainer.destroy();
+        }
+
+        this.patronContainer = this.add.container(width + 400, height); 
+        this.patronContainer.depth = 1900;
+
+        const patronImg = this.add.image(0, 0, 'patron');
+        patronImg.setOrigin(1, 1);
+        patronImg.setScale(0.4);
+
+        const patronSozleri = this.t('patronQuotes');
+        const secilenSoz = patronSozleri[Math.floor(Math.random() * patronSozleri.length)];
+
+        const bubbleWidth = 320;
+        const bubbleHeight = 110;
+        const bubbleX = -450; 
+        const bubbleY = -350;
+
+        const bubble = this.add.graphics();
+        bubble.fillStyle(0xfdf6e3, 1); 
+        bubble.fillRoundedRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight, 15);
+        bubble.lineStyle(3, 0x2c3e50, 1);
+        bubble.strokeRoundedRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight, 15);
+
+        bubble.fillStyle(0xfdf6e3, 1);
+        bubble.beginPath();
+        bubble.moveTo(bubbleX + bubbleWidth - 50, bubbleY + bubbleHeight); 
+        bubble.lineTo(bubbleX + bubbleWidth - 10, bubbleY + bubbleHeight + 40); 
+        bubble.lineTo(bubbleX + bubbleWidth - 20, bubbleY + bubbleHeight); 
+        bubble.fillPath();
+
+        const diyalogText = this.add.text(bubbleX + bubbleWidth / 2, bubbleY + bubbleHeight / 2, secilenSoz, {
+            fontFamily: 'Courier', fontSize: '16px', color: '#2c3e50', fontStyle: 'bold',
+            align: 'center', wordWrap: { width: 290 }
+        }).setOrigin(0.5);
+
+        this.patronContainer.add([patronImg, bubble, diyalogText]);
+
+        this.tweens.add({
+            targets: this.patronContainer,
+            x: width - 20, 
+            duration: 400,
+            ease: 'Power2'
+        });
+    }
+
+    hidePatronQuote() {
+        if (this.patronContainer) {
+            this.tweens.add({
+                targets: this.patronContainer,
+                x: this.scale.width + 400, 
+                duration: 300,
+                ease: 'Power2',
+                onComplete: () => {
+                    if(this.patronContainer) {
+                        this.patronContainer.destroy();
+                        this.patronContainer = null;
+                    }
+                }
+            });
+        }
+    }
+
     triggerBreakdownPopup(machine) {
         this.playSound('alarm');
         this.playSound('thud');
@@ -724,6 +795,8 @@ class MainScene extends Phaser.Scene {
         });
         
         this.breakdownPopup.add([buttonB, textB]);
+
+        this.showPatronQuote();
     }
 
     closeBreakdownPopup() {
@@ -731,6 +804,8 @@ class MainScene extends Phaser.Scene {
             this.breakdownPopup.destroy();
             this.breakdownPopup = null;
         }
+        this.hidePatronQuote();
+        
         this.isPaused = false;
         this.spawnEvent.paused = false;
         this.breakdownEvent.paused = false;
@@ -819,7 +894,7 @@ class MainScene extends Phaser.Scene {
             this.triggerGameOver();
         }
         
-        if (this.budget >= 10000 && !this.isGameOver) {
+        if (this.budget >= 5000 && !this.isGameOver) {
             this.triggerVictory();
         }
     }
@@ -887,47 +962,7 @@ class MainScene extends Phaser.Scene {
         }).setOrigin(0.5);
         this.crisisPopup.add(textB);
 
-        this.patronContainer = this.add.container(width + 400, height); 
-        this.patronContainer.depth = 1600;
-
-        const patronImg = this.add.image(0, 0, 'patron');
-        patronImg.setOrigin(1, 1);
-        patronImg.setScale(0.4);
-
-        const patronSozleri = this.t('patronQuotes');
-        const secilenSoz = patronSozleri[Math.floor(Math.random() * patronSozleri.length)];
-
-        const bubbleWidth = 320;
-        const bubbleHeight = 110;
-        const bubbleX = -450; 
-        const bubbleY = -350;
-
-        const bubble = this.add.graphics();
-        bubble.fillStyle(0xfdf6e3, 1); 
-        bubble.fillRoundedRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight, 15);
-        bubble.lineStyle(3, 0x2c3e50, 1);
-        bubble.strokeRoundedRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight, 15);
-
-        bubble.fillStyle(0xfdf6e3, 1);
-        bubble.beginPath();
-        bubble.moveTo(bubbleX + bubbleWidth - 50, bubbleY + bubbleHeight); 
-        bubble.lineTo(bubbleX + bubbleWidth - 10, bubbleY + bubbleHeight + 40); 
-        bubble.lineTo(bubbleX + bubbleWidth - 20, bubbleY + bubbleHeight); 
-        bubble.fillPath();
-
-        const diyalogText = this.add.text(bubbleX + bubbleWidth / 2, bubbleY + bubbleHeight / 2, secilenSoz, {
-            fontFamily: 'Courier', fontSize: '16px', color: '#2c3e50', fontStyle: 'bold',
-            align: 'center', wordWrap: { width: 290 }
-        }).setOrigin(0.5);
-
-        this.patronContainer.add([patronImg, bubble, diyalogText]);
-
-        this.tweens.add({
-            targets: this.patronContainer,
-            x: width - 20, 
-            duration: 400,
-            ease: 'Power2'
-        });
+        this.showPatronQuote();
     }
 
     resolveCrisis(choice) {
@@ -939,18 +974,7 @@ class MainScene extends Phaser.Scene {
             this.crisisPopup = null;
         }
 
-        if (this.patronContainer) {
-            this.tweens.add({
-                targets: this.patronContainer,
-                x: width + 400, 
-                duration: 300,
-                ease: 'Power2',
-                onComplete: () => {
-                    this.patronContainer.destroy();
-                    this.patronContainer = null;
-                }
-            });
-        }
+        this.hidePatronQuote();
 
         if (choice === 'budget') {
             this.budget -= 500;
@@ -1054,18 +1078,19 @@ class MainScene extends Phaser.Scene {
         overlay.fillRect(0, 0, width, height);
         overlay.depth = 2000;
 
-        const letterBg = this.add.rectangle(width / 2, height / 2, 700, 450, 0xfdf6e3);
+        const letterBg = this.add.rectangle(width / 2, height / 2, 700, 480, 0xfdf6e3);
         letterBg.setStrokeStyle(4, 0x27ae60); 
         letterBg.depth = 2001;
 
-        this.add.text(width / 2, height / 2 - 160, this.t('victoryTitle'), {
+        this.add.text(width / 2, height / 2 - 190, this.t('victoryTitle'), {
             fontFamily: 'Courier', fontSize: '32px', color: '#27ae60', fontStyle: 'bold'
         }).setOrigin(0.5).setDepth(2002);
 
-        this.add.text(width / 2, height / 2 + 20, this.t('victoryBody'), {
+        // YENİ: setOrigin(0.5, 0) sayesinde yazı artık yukarı taşmıyor, her zaman başlığın altında kalıyor!
+        this.add.text(width / 2, height / 2 - 130, this.t('victoryBody'), {
             fontFamily: 'Courier', fontSize: '20px', color: '#2c3e50',
             wordWrap: { width: 600 }, align: 'center', lineSpacing: 10, fontStyle: 'bold'
-        }).setOrigin(0.5).setDepth(2002);
+        }).setOrigin(0.5, 0).setDepth(2002);
         
         this.playSound('money');
         this.time.delayedCall(200, () => this.playSound('money'));
