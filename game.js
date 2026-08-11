@@ -1128,7 +1128,10 @@ class MainScene extends Phaser.Scene {
                 if (this.budget >= up.costs[up.level]) {
                     this.budget -= up.costs[up.level];
                     up.level++;
-                    this.machines[2].processingTime -= 800; 
+                    
+                    // DENGELENDİ: Artık her seviye makineyi 800ms değil, sadece 500ms hızlandırıyor!
+                    this.machines[2].processingTime -= 500; 
+                    
                     this.updateResourceBars();
                     this.playSound('money');
                     
