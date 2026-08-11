@@ -27,12 +27,12 @@ const TEXTS = {
         statusCrisisNear: "⚠️ KRİZ YAKIN",
         statusBroken: "💥 ARIZALI",
         bottleneckWarning: "⚠️ DARBOĞAZ",
-        manualBonus: "⚡ MANUEL",
+        manualBonus: "🗑️ ÇÖPE GİTTİ",
         repairCost: "-100$ (Tamir)",
         flowBonus: "🔥 FLOW STATE! Ürünler +75$ 🔥",
         flowBroken: "❌ Akış Bozuldu...",
         tutorialTitle: "⚡ YENİ YETENEK: OVERDRIVE",
-        tutorialBody: "Makine tıkanmak üzere! Kriz çıkmadan önce makineye (üzerine) tıklayarak kutuları MANUEL olarak eritebilirsin.\n\nKAZANIM: Anında +50$ Bütçe\nBEDEL: -2 Akıl Sağlığı (Yorulursun!)\n\nAkıl sağlığını sıfırlamadan krizleri önlemek için bu gücü dikkatli kullan!",
+        tutorialBody: "Makine tıkanmak üzere! Kriz çıkmadan önce makineye (üzerine) tıklayarak kutuları MANUEL olarak çöpe atabilirsin.\n\nKAZANIM: Kriz önlenir (Para kazandırmaz!)\nBEDEL: -2 Akıl Sağlığı (Yorulursun!)\n\nAkıl sağlığını sıfırlamadan krizleri önlemek için bu gücü dikkatli kullan!",
         understood: "ANLADIM",
         crisisTitle: "KRİZ: ÜRETİM HATTI TIKANDI!",
         callMaster: "Usta Çağır (-500 Bütçe)",
@@ -81,12 +81,12 @@ const TEXTS = {
         statusCrisisNear: "⚠️ CRISIS NEAR",
         statusBroken: "💥 BROKEN",
         bottleneckWarning: "⚠️ BOTTLENECK",
-        manualBonus: "⚡ MANUAL",
+        manualBonus: "🗑️ TRASHED",
         repairCost: "-100$ (Repair)",
         flowBonus: "🔥 FLOW STATE! Products +$75 🔥",
         flowBroken: "❌ Flow Broken...",
         tutorialTitle: "⚡ NEW SKILL: OVERDRIVE",
-        tutorialBody: "The machine is about to jam! Before a crisis hits, you can click on the machine to MANUALLY melt away the boxes.\n\nREWARD: Instant +$50 Budget\nCOST: -2 Sanity (It's exhausting!)\n\nUse this power carefully to prevent crises without draining your sanity to zero!",
+        tutorialBody: "The machine is about to jam! Before a crisis hits, you can click on the machine to MANUALLY destroy the boxes.\n\nREWARD: Crisis prevented (No money earned!)\nCOST: -2 Sanity (It's exhausting!)\n\nUse this power carefully to prevent crises without draining your sanity to zero!",
         understood: "GOT IT",
         crisisTitle: "CRISIS: PRODUCTION LINE JAMMED!",
         callMaster: "Call Mechanic (-500 Budget)",
@@ -133,9 +133,7 @@ class MainScene extends Phaser.Scene {
         this.isFlowState = false;
     }
 
-    // --- YENİ: DİL DEĞİŞKENİNİ ALDIĞIMIZ FONKSİYON ---
     init(data) {
-        // Eğer data.lang boşsa (ilk açılış), null olarak kalsın
         this.currentLang = data.lang || null;
     }
 
@@ -155,9 +153,7 @@ class MainScene extends Phaser.Scene {
         const width = this.scale.width;
         const height = this.scale.height;
 
-        // --- YENİ: DİL SEÇİM EKRANI ---
         if (!this.currentLang) {
-            // Dil seçilmediyse siyah bir arka plan ve 2 buton çiz
             this.add.rectangle(0, 0, width, height, 0x1a252f).setOrigin(0);
             
             this.add.text(width / 2, height / 2 - 100, "SELECT LANGUAGE / DİL SEÇİNİZ", {
@@ -172,7 +168,6 @@ class MainScene extends Phaser.Scene {
             btnEn.setStrokeStyle(2, 0x2980b9);
             this.add.text(width / 2 + 150, height / 2 + 50, "ENGLISH", { fontFamily: 'Courier', fontSize: '24px', color: '#ffffff', fontStyle: 'bold' }).setOrigin(0.5);
 
-            // Butonlara tıklandığında oyunu o dille yeniden başlat (restart)
             btnTr.on('pointerdown', () => {
                 this.playSound('click');
                 this.scene.restart({ lang: 'tr' });
@@ -183,11 +178,9 @@ class MainScene extends Phaser.Scene {
                 this.scene.restart({ lang: 'en' });
             });
             
-            // Dil seçilmeden oyunun geri kalanını (fabrikayı) YÜKLEME!
             return; 
         }
 
-        // --- NORMAL OYUN YÜKLEMESİ (DİL SEÇİLDİKTEN SONRA ÇALIŞIR) ---
         this.bgImage = this.add.image(width / 2, height / 2, 'bg');
         this.bgImage.setDisplaySize(width, height); 
         this.bgImage.depth = 0;
@@ -279,16 +272,12 @@ class MainScene extends Phaser.Scene {
                     const product = machineData.queue.shift();
                     product.destroy(); 
                     
-                    const salePrice = this.isFlowState ? 75 : 50;
-                    this.budget += salePrice;
-                    this.productCount++;
-                    this.scoreText.setText(`${this.t('produced')}${this.productCount}`);
-                    
-                    this.showFloatingText(pos.x, pos.y - 50, `${this.t('manualBonus')} (+${salePrice}$)`, '#e67e22');
+                    // YENİ: Artık manuel tıklama para vermiyor, ürünü çöpe atıyor!
+                    this.showFloatingText(pos.x, pos.y - 50, this.t('manualBonus'), '#e74c3c');
                     this.playSound('thud');
                     
                     this.cameras.main.shake(50, 0.002);
-                    machine.setFillStyle(0xe67e22);
+                    machine.setFillStyle(0xe74c3c); // Rengi turuncudan kırmızıya (çöp) çektik
                     this.time.delayedCall(100, () => machine.setFillStyle(0x2c3e50));
                 }
             });
@@ -341,18 +330,16 @@ class MainScene extends Phaser.Scene {
         });
 
         this.productSpeed = 2; 
-        // --- YENİ: KAHVE MAKİNESİ PASİF İYİLEŞME SİSTEMİ ---
+
+        // Kahve makinesi pasif iyileşmesi
         this.time.addEvent({
-            delay: 5000, // Her 5 saniyede bir çalışır
+            delay: 5000,
             callback: () => {
                 if (this.gameStarted && !this.isPaused && !this.isGameOver) {
                     if (this.upgrades.coffee.level > 0 && this.sanity < 100) {
-                        // Level başına 2 Akıl Sağlığı doldur (Lvl 3 ise +6 doldurur)
                         const healAmount = this.upgrades.coffee.level * 2;
                         this.sanity = Math.min(100, this.sanity + healAmount);
                         this.updateResourceBars();
-                        
-                        // Ekrandan uçuşan tatlı bir bildirim
                         this.showFloatingText(this.scale.width / 2 + 250, 70, `+${healAmount} ☕`, '#3498db');
                     }
                 }
@@ -1142,11 +1129,8 @@ class MainScene extends Phaser.Scene {
                 if (this.budget >= up.costs[up.level]) {
                     this.budget -= up.costs[up.level];
                     up.level++;
-                    
-                    // 1. Süreyi çok daha belirgin şekilde düşür (400ms)
                     this.spawnDelay = Math.max(500, this.spawnDelay - 400);
                     
-                    // 2. PHASER ÇÖZÜMÜ: Eski zamanlayıcıyı sil, yeni hızla tekrar kur!
                     if (this.spawnEvent) this.spawnEvent.destroy();
                     this.spawnEvent = this.time.addEvent({
                         delay: this.spawnDelay, 
@@ -1155,7 +1139,6 @@ class MainScene extends Phaser.Scene {
                         loop: true
                     });
 
-                    // 3. Ekstra Tatmin: Kutuların fiziksel kayma hızını da artır
                     this.productSpeed += 0.5;
 
                     this.updateResourceBars();
@@ -1183,7 +1166,6 @@ class MainScene extends Phaser.Scene {
                 if (this.budget >= up.costs[up.level]) {
                     this.budget -= up.costs[up.level];
                     up.level++;
-                    this.sanityPenalty -= 5; 
                     this.updateResourceBars();
                     this.playSound('money');
                     
@@ -1381,12 +1363,8 @@ class MainScene extends Phaser.Scene {
 
 const config = {
     type: Phaser.AUTO,
-    scale: {
-        mode: Phaser.Scale.FIT, // Esnemeyi iptal ettik, orijinal kaliteye döndük
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-        width: 1280,
-        height: 720
-    },
+    width: 1280,
+    height: 720,
     parent: 'game-container',
     backgroundColor: '#c8d6e5',
     scene: MainScene
