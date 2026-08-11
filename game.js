@@ -1124,8 +1124,22 @@ class MainScene extends Phaser.Scene {
                 if (this.budget >= up.costs[up.level]) {
                     this.budget -= up.costs[up.level];
                     up.level++;
-                    this.spawnDelay = Math.max(500, this.spawnDelay - 250);
-                    this.spawnEvent.delay = this.spawnDelay;
+                    
+                    // 1. Süreyi çok daha belirgin şekilde düşür (400ms)
+                    this.spawnDelay = Math.max(500, this.spawnDelay - 400);
+                    
+                    // 2. PHASER ÇÖZÜMÜ: Eski zamanlayıcıyı sil, yeni hızla tekrar kur!
+                    if (this.spawnEvent) this.spawnEvent.destroy();
+                    this.spawnEvent = this.time.addEvent({
+                        delay: this.spawnDelay, 
+                        callback: this.spawnProduct, 
+                        callbackScope: this, 
+                        loop: true
+                    });
+
+                    // 3. Ekstra Tatmin: Kutuların fiziksel kayma hızını da artır
+                    this.productSpeed += 0.5;
+
                     this.updateResourceBars();
                     this.playSound('money');
                     
