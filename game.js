@@ -19,7 +19,7 @@ const TEXTS = {
         welcomeBody: "Sonunda işi kabul eden birini bulduk! Senden önceki müdürler nedense hemen istifa etti. Yeni nesil çalışmak istemiyor, hep bir bahane!\n\nÜretim bandı çok basit. Ancak küçük bir detay: 3 numaralı makine (M-3) biraz eski, yavaş çalışır ve sürekli tıkanıp kriz çıkarır. Onu hızlandırmak veya krizleri çözmek senin işin. Reviri kapattık, bol bol nefes egzersizi yapmanı öneririm.",
         nextBtn: "İLERİ >>",
         howToTitle: "📋 OYUNUN İŞLEYİŞİ",
-        howToBody: "1️⃣ AKIŞ: Ürünler bantta ilerler. 3 numaralı makine (M-3) sistemdeki darboğazdır (bottleneck) ve ürünler orada birikmeye başlar.\n\n2️⃣ MÜDAHALE (OVERDRIVE): Bir makine tıkanmak üzereyse arıza vermesini bekleme! Üzerine tıklayarak kutuları manuel eritebilirsin. Sana para kazandırır ama yorulduğun için Akıl Sağlığını (-2) düşürür.\n\n3️⃣ GELİŞTİRME: Kazandığın bütçeyle sol alt köşeden M-3'ü hızlandırabilir, bant hızını artırabilir veya pasif iyileşme için Kahve Makinesi alabilirsin.\n\n🎯 HEDEF: Bütçeni veya Akıl Sağlığını sıfırlamadan 5000$ bütçeye ulaş!",
+        howToBody: "1️⃣ AKIŞ: Ürünler bantta ilerler. 3 numaralı makine (M-3) sistemdeki darboğazdır (bottleneck) ve ürünler orada birikmeye başlar.\n\n2️⃣ MÜDAHALE (OVERDRIVE): Bir makine tıkanmak üzereyse arıza vermesini bekleme! Üzerine tıklayarak kutuları manuel eritebilirsin. Sana para kazandırır ama yorulduğun için Akıl Sağlığını (-10) düşürür.\n\n3️⃣ GELİŞTİRME: Kazandığın bütçeyle sol alt köşeden M-3'ü hızlandırabilir, bant hızını artırabilir veya pasif iyileşme için Kahve Makinesi alabilirsin.\n\n🎯 HEDEF: Bütçeni veya Akıl Sağlığını sıfırlamadan 5000$ bütçeye ulaş!",
         startWork: "MESAİYE BAŞLA",
         companyAdvance: "+1000 (Şirket Avansı)",
         speed: "Hız: ",
@@ -35,7 +35,7 @@ const TEXTS = {
         flowBonus: "🔥 FLOW STATE! Ürünler +75$ 🔥",
         flowBroken: "❌ Akış Bozuldu...",
         tutorialTitle: "⚡ YENİ YETENEK: OVERDRIVE",
-        tutorialBody: "Makine tıkanmak üzere! Kriz çıkmadan önce makineye (üzerine) tıklayarak kutuları MANUEL olarak eritebilirsin.\n\nKAZANIM: Anında +50$ Bütçe\nBEDEL: -2 Akıl Sağlığı (Yorulursun!)\n\nAkıl sağlığını sıfırlamadan krizleri önlemek için bu gücü dikkatli kullan!",
+        tutorialBody: "Makine tıkanmak üzere! Kriz çıkmadan önce makineye (üzerine) tıklayarak kutuları MANUEL olarak eritebilirsin.\n\nKAZANIM: Anında +50$ Bütçe\nBEDEL: -10 Akıl Sağlığı (Çok Yorulursun!)\n\nAkıl sağlığını sıfırlamadan krizleri önlemek için bu gücü dikkatli kullan!",
         understood: "ANLADIM",
         crisisTitle: "KRİZ: ÜRETİM HATTI TIKANDI!",
         callMaster: "Usta Çağır (-500 Bütçe)",
@@ -76,7 +76,7 @@ const TEXTS = {
         welcomeBody: "We finally found someone to take the job! The previous managers resigned immediately for some reason. The new generation just doesn't want to work, always making excuses!\n\nThe production line is simple. But a small detail: machine number 3 (M-3) is a bit old, works slowly, and constantly jams, causing crises. Speeding it up or solving the crises is your job. We closed the infirmary, so I suggest doing plenty of breathing exercises.",
         nextBtn: "NEXT >>",
         howToTitle: "📋 HOW TO PLAY",
-        howToBody: "1️⃣ THE FLOW: Products move along the belt. Machine 3 (M-3) is the bottleneck, products will pile up there.\n\n2️⃣ INTERVENTION (OVERDRIVE): Don't wait for a breakdown! If a machine is jamming, click on it to manually melt the boxes. It earns you money but drains your Sanity (-2).\n\n3️⃣ UPGRADES: Use your budget on the bottom left to speed up M-3, increase belt speed, or buy a Coffee Machine for passive healing.\n\n🎯 GOAL: Reach $5000 Budget without letting your Budget or Sanity drop to zero!",
+        howToBody: "1️⃣ THE FLOW: Products move along the belt. Machine 3 (M-3) is the bottleneck, products will pile up there.\n\n2️⃣ INTERVENTION (OVERDRIVE): Don't wait for a breakdown! If a machine is jamming, click on it to manually melt the boxes. It earns you money but drains your Sanity (-10).\n\n3️⃣ UPGRADES: Use your budget on the bottom left to speed up M-3, increase belt speed, or buy a Coffee Machine for passive healing.\n\n🎯 GOAL: Reach $5000 Budget without letting your Budget or Sanity drop to zero!",
         startWork: "START SHIFT",
         companyAdvance: "+1000 (Company Advance)",
         speed: "Spd: ",
@@ -92,7 +92,7 @@ const TEXTS = {
         flowBonus: "🔥 FLOW STATE! Products +$75 🔥",
         flowBroken: "❌ Flow Broken...",
         tutorialTitle: "⚡ NEW SKILL: OVERDRIVE",
-        tutorialBody: "The machine is about to jam! Before a crisis hits, you can click on the machine to MANUALLY melt away the boxes.\n\nREWARD: Instant +$50 Budget\nCOST: -2 Sanity (It's exhausting!)\n\nUse this power carefully to prevent crises without draining your sanity to zero!",
+        tutorialBody: "The machine is about to jam! Before a crisis hits, you can click on the machine to MANUALLY melt away the boxes.\n\nREWARD: Instant +$50 Budget\nCOST: -10 Sanity (It's exhausting!)\n\nUse this power carefully to prevent crises without draining your sanity to zero!",
         understood: "GOT IT",
         crisisTitle: "CRISIS: PRODUCTION LINE JAMMED!",
         callMaster: "Call Mechanic (-500 Budget)",
@@ -272,7 +272,8 @@ class MainScene extends Phaser.Scene {
                 }
                 
                 if (machineData.queue.length >= 5) {
-                    this.sanity -= 2; 
+                    // DENGELENDİ: Artık Overdrive çok yorucu (-10)
+                    this.sanity -= 10; 
                     this.updateResourceBars();
                     
                     const product = machineData.queue.shift();
@@ -443,10 +444,11 @@ class MainScene extends Phaser.Scene {
             fontFamily: 'Courier', fontSize: '27px', color: '#c0392b', fontStyle: 'bold'
         }).setOrigin(0.5);
 
-        const letterBody = this.add.text(width / 2 - 100, height / 2 - 20, this.t('welcomeBody'), {
+        // HİZALAMA ÇÖZÜLDÜ: setOrigin(0.5, 0) yapıldı ve Y konumu aşağı çekildi.
+        const letterBody = this.add.text(width / 2 - 100, height / 2 - 140, this.t('welcomeBody'), {
             fontFamily: 'Courier', fontSize: '17px', color: '#2c3e50',
             wordWrap: { width: 420 }, align: 'left', lineSpacing: 8, fontStyle: 'bold'
-        }).setOrigin(0.5);
+        }).setOrigin(0.5, 0);
 
         const startBtnBg = this.add.rectangle(width / 2, height / 2 + 180, 250, 50, 0xe74c3c).setInteractive({ useHandCursor: true });
         startBtnBg.setStrokeStyle(2, 0xc0392b);
@@ -455,7 +457,6 @@ class MainScene extends Phaser.Scene {
             fontSize: '20px', color: '#ffffff', fontStyle: 'bold'
         }).setOrigin(0.5);
 
-        // İLERİ BUTONUNA BASILINCA
         startBtnBg.on('pointerdown', () => {
             this.playSound('click'); 
             this.introContainer.destroy();
@@ -472,10 +473,11 @@ class MainScene extends Phaser.Scene {
                 fontFamily: 'Courier', fontSize: '30px', color: '#d35400', fontStyle: 'bold'
             }).setOrigin(0.5);
 
-            const howToBody = this.add.text(width / 2, height / 2 - 10, this.t('howToBody'), {
+            // HİZALAMA ÇÖZÜLDÜ: setOrigin(0.5, 0) yapıldı ve Y konumu başlığın altından başlatıldı.
+            const howToBody = this.add.text(width / 2, height / 2 - 130, this.t('howToBody'), {
                 fontFamily: 'Courier', fontSize: '18px', color: '#2c3e50',
                 wordWrap: { width: 620 }, align: 'left', lineSpacing: 12, fontStyle: 'bold'
-            }).setOrigin(0.5);
+            }).setOrigin(0.5, 0);
 
             const startRealBtnBg = this.add.rectangle(width / 2, height / 2 + 180, 280, 50, 0x27ae60).setInteractive({ useHandCursor: true });
             startRealBtnBg.setStrokeStyle(2, 0x2ecc71);
@@ -484,7 +486,6 @@ class MainScene extends Phaser.Scene {
                 fontSize: '22px', color: '#ffffff', fontStyle: 'bold'
             }).setOrigin(0.5);
 
-            // MESAİYE BAŞLA BUTONUNA BASILINCA
             startRealBtnBg.on('pointerdown', () => {
                 this.playSound('click'); 
                 this.howToContainer.destroy();
@@ -787,16 +788,16 @@ class MainScene extends Phaser.Scene {
         }).setOrigin(0.5);
         this.breakdownPopup.add(title);
 
-        const body = this.add.text(width / 2, modalY + 80, `M-${machine.id} ${this.t('breakdownBody')}`, {
+        const body = this.add.text(width / 2, modalY + 90, `M-${machine.id} ${this.t('breakdownBody')}`, {
             fontSize: '16px', color: '#ffffff', fontStyle: 'bold', align: 'center', wordWrap: { width: 400 }
         }).setOrigin(0.5);
         this.breakdownPopup.add(body);
 
-        const buttonA = this.add.rectangle(width / 2, modalY + 140, 350, 40, 0x27ae60);
+        const buttonA = this.add.rectangle(width / 2, modalY + 150, 350, 40, 0x27ae60);
         buttonA.setStrokeStyle(2, 0x2ecc71, 1);
         buttonA.setInteractive({ useHandCursor: true });
         
-        const textA = this.add.text(width / 2, modalY + 140, this.t('repairNow'), {
+        const textA = this.add.text(width / 2, modalY + 150, this.t('repairNow'), {
             fontSize: '16px', color: '#ffffff', fontStyle: 'bold'
         }).setOrigin(0.5);
         
@@ -816,17 +817,17 @@ class MainScene extends Phaser.Scene {
                     this.startProcessing(machine, nextProduct, machine.id);
                 }
             } else {
-                this.showWarning(width / 2, modalY + 140, this.t('insufficientBudget'));
+                this.showWarning(width / 2, modalY + 150, this.t('insufficientBudget'));
             }
         });
         
         this.breakdownPopup.add([buttonA, textA]);
 
-        const buttonB = this.add.rectangle(width / 2, modalY + 190, 350, 40, 0x7f8c8d);
+        const buttonB = this.add.rectangle(width / 2, modalY + 200, 350, 40, 0x7f8c8d);
         buttonB.setStrokeStyle(2, 0x95a5a6, 1);
         buttonB.setInteractive({ useHandCursor: true });
         
-        const textB = this.add.text(width / 2, modalY + 190, this.t('ignoreBreakdown'), {
+        const textB = this.add.text(width / 2, modalY + 200, this.t('ignoreBreakdown'), {
             fontSize: '16px', color: '#ffffff', fontStyle: 'bold'
         }).setOrigin(0.5);
         
@@ -887,9 +888,10 @@ class MainScene extends Phaser.Scene {
         }).setOrigin(0.5);
         this.tutorialPopup.add(title);
         
-        const textBody = this.add.text(width / 2, height / 2, this.t('tutorialBody'), {
+        // HİZALAMA ÇÖZÜLDÜ: setOrigin(0.5, 0)
+        const textBody = this.add.text(width / 2, modalY + 110, this.t('tutorialBody'), {
             fontSize: '18px', color: '#ffffff', fontStyle: 'bold', align: 'center', wordWrap: { width: 520 }, lineSpacing: 15
-        }).setOrigin(0.5, 0.5);
+        }).setOrigin(0.5, 0);
         this.tutorialPopup.add(textBody);
 
         const btn = this.add.rectangle(width / 2, modalY + 390, 200, 50, 0xe67e22);
@@ -1127,7 +1129,8 @@ class MainScene extends Phaser.Scene {
             fontFamily: 'Courier', fontSize: '32px', color: '#27ae60', fontStyle: 'bold'
         }).setOrigin(0.5).setDepth(2002);
 
-        this.add.text(width / 2, height / 2 - 130, this.t('victoryBody'), {
+        // HİZALAMA ÇÖZÜLDÜ: setOrigin(0.5, 0)
+        this.add.text(width / 2, height / 2 - 120, this.t('victoryBody'), {
             fontFamily: 'Courier', fontSize: '20px', color: '#2c3e50',
             wordWrap: { width: 600 }, align: 'center', lineSpacing: 10, fontStyle: 'bold'
         }).setOrigin(0.5, 0).setDepth(2002);
