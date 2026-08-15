@@ -17,6 +17,9 @@ const TEXTS = {
         insufficientBudget: "YETERSİZ BÜTÇE!",
         welcomeTitle: "FIRED BY FRIDAY'E HOŞ GELDİN!",
         welcomeBody: "Sonunda işi kabul eden birini bulduk! Senden önceki müdürler nedense hemen istifa etti. Yeni nesil çalışmak istemiyor, hep bir bahane!\n\nÜretim bandı çok basit. Ancak küçük bir detay: 3 numaralı makine (M-3) biraz eski, yavaş çalışır ve sürekli tıkanıp kriz çıkarır. Onu hızlandırmak veya krizleri çözmek senin işin. Reviri kapattık, bol bol nefes egzersizi yapmanı öneririm.",
+        nextBtn: "İLERİ >>",
+        howToTitle: "📋 OYUNUN İŞLEYİŞİ",
+        howToBody: "1️⃣ AKIŞ: Ürünler bantta ilerler. 3 numaralı makine (M-3) sistemdeki darboğazdır (bottleneck) ve ürünler orada birikmeye başlar.\n\n2️⃣ MÜDAHALE (OVERDRIVE): Bir makine tıkanmak üzereyse arıza vermesini bekleme! Üzerine tıklayarak kutuları manuel eritebilirsin. Sana para kazandırır ama yorulduğun için Akıl Sağlığını (-2) düşürür.\n\n3️⃣ GELİŞTİRME: Kazandığın bütçeyle sol alt köşeden M-3'ü hızlandırabilir, bant hızını artırabilir veya pasif iyileşme için Kahve Makinesi alabilirsin.\n\n🎯 HEDEF: Bütçeni veya Akıl Sağlığını sıfırlamadan 5000$ bütçeye ulaş!",
         startWork: "MESAİYE BAŞLA",
         companyAdvance: "+1000 (Şirket Avansı)",
         speed: "Hız: ",
@@ -71,6 +74,9 @@ const TEXTS = {
         insufficientBudget: "NOT ENOUGH BUDGET!",
         welcomeTitle: "WELCOME TO FIRED BY FRIDAY!",
         welcomeBody: "We finally found someone to take the job! The previous managers resigned immediately for some reason. The new generation just doesn't want to work, always making excuses!\n\nThe production line is simple. But a small detail: machine number 3 (M-3) is a bit old, works slowly, and constantly jams, causing crises. Speeding it up or solving the crises is your job. We closed the infirmary, so I suggest doing plenty of breathing exercises.",
+        nextBtn: "NEXT >>",
+        howToTitle: "📋 HOW TO PLAY",
+        howToBody: "1️⃣ THE FLOW: Products move along the belt. Machine 3 (M-3) is the bottleneck, products will pile up there.\n\n2️⃣ INTERVENTION (OVERDRIVE): Don't wait for a breakdown! If a machine is jamming, click on it to manually melt the boxes. It earns you money but drains your Sanity (-2).\n\n3️⃣ UPGRADES: Use your budget on the bottom left to speed up M-3, increase belt speed, or buy a Coffee Machine for passive healing.\n\n🎯 GOAL: Reach $5000 Budget without letting your Budget or Sanity drop to zero!",
         startWork: "START SHIFT",
         companyAdvance: "+1000 (Company Advance)",
         speed: "Spd: ",
@@ -422,6 +428,7 @@ class MainScene extends Phaser.Scene {
         this.breakdownEvent.paused = true; 
         this.gameStarted = false;
 
+        // 1. EKRAN: ANDREW'UN MEKTUBU
         this.introContainer = this.add.container(0, 0);
         this.introContainer.setDepth(2000);
 
@@ -444,25 +451,59 @@ class MainScene extends Phaser.Scene {
         const startBtnBg = this.add.rectangle(width / 2, height / 2 + 180, 250, 50, 0xe74c3c).setInteractive({ useHandCursor: true });
         startBtnBg.setStrokeStyle(2, 0xc0392b);
         
-        const startBtnText = this.add.text(width / 2, height / 2 + 180, this.t('startWork'), {
+        const startBtnText = this.add.text(width / 2, height / 2 + 180, this.t('nextBtn'), {
             fontSize: '20px', color: '#ffffff', fontStyle: 'bold'
         }).setOrigin(0.5);
 
+        // İLERİ BUTONUNA BASILINCA
         startBtnBg.on('pointerdown', () => {
             this.playSound('click'); 
             this.introContainer.destroy();
-            this.gameStarted = true;
-            this.spawnEvent.paused = false;
-            this.breakdownEvent.paused = false; 
             
-            this.budget = 1000; 
-            this.updateResourceBars();
+            // 2. EKRAN: OYUNUN İŞLEYİŞİ
+            this.howToContainer = this.add.container(0, 0);
+            this.howToContainer.setDepth(2000);
             
-            const barStartX = (width - 420) / 2; 
-            this.showFloatingText(barStartX + 100, 50, this.t('companyAdvance'), '#2ecc71');
+            const overlay2 = this.add.rectangle(0, 0, width, height, 0x000000, 0.8).setOrigin(0);
+            const parchmentBg = this.add.rectangle(width / 2, height / 2, 700, 480, 0xf4e5c2);
+            parchmentBg.setStrokeStyle(4, 0xd35400);
+
+            const howToTitle = this.add.text(width / 2, height / 2 - 190, this.t('howToTitle'), {
+                fontFamily: 'Courier', fontSize: '30px', color: '#d35400', fontStyle: 'bold'
+            }).setOrigin(0.5);
+
+            const howToBody = this.add.text(width / 2, height / 2 - 10, this.t('howToBody'), {
+                fontFamily: 'Courier', fontSize: '18px', color: '#2c3e50',
+                wordWrap: { width: 620 }, align: 'left', lineSpacing: 12, fontStyle: 'bold'
+            }).setOrigin(0.5);
+
+            const startRealBtnBg = this.add.rectangle(width / 2, height / 2 + 180, 280, 50, 0x27ae60).setInteractive({ useHandCursor: true });
+            startRealBtnBg.setStrokeStyle(2, 0x2ecc71);
             
-            this.playSound('money');
-            this.startAmbientSound(); 
+            const startRealBtnText = this.add.text(width / 2, height / 2 + 180, this.t('startWork'), {
+                fontSize: '22px', color: '#ffffff', fontStyle: 'bold'
+            }).setOrigin(0.5);
+
+            // MESAİYE BAŞLA BUTONUNA BASILINCA
+            startRealBtnBg.on('pointerdown', () => {
+                this.playSound('click'); 
+                this.howToContainer.destroy();
+                
+                this.gameStarted = true;
+                this.spawnEvent.paused = false;
+                this.breakdownEvent.paused = false; 
+                
+                this.budget = 1000; 
+                this.updateResourceBars();
+                
+                const barStartX = (width - 420) / 2; 
+                this.showFloatingText(barStartX + 100, 50, this.t('companyAdvance'), '#2ecc71');
+                
+                this.playSound('money');
+                this.startAmbientSound(); 
+            });
+
+            this.howToContainer.add([overlay2, parchmentBg, howToTitle, howToBody, startRealBtnBg, startRealBtnText]);
         });
 
         this.introContainer.add([darkOverlay, letterBg, patronImg, letterTitle, letterBody, startBtnBg, startBtnText]);
@@ -1086,7 +1127,6 @@ class MainScene extends Phaser.Scene {
             fontFamily: 'Courier', fontSize: '32px', color: '#27ae60', fontStyle: 'bold'
         }).setOrigin(0.5).setDepth(2002);
 
-        // YENİ: setOrigin(0.5, 0) sayesinde yazı artık yukarı taşmıyor, her zaman başlığın altında kalıyor!
         this.add.text(width / 2, height / 2 - 130, this.t('victoryBody'), {
             fontFamily: 'Courier', fontSize: '20px', color: '#2c3e50',
             wordWrap: { width: 600 }, align: 'center', lineSpacing: 10, fontStyle: 'bold'
@@ -1128,10 +1168,7 @@ class MainScene extends Phaser.Scene {
                 if (this.budget >= up.costs[up.level]) {
                     this.budget -= up.costs[up.level];
                     up.level++;
-                    
-                    // DENGELENDİ: Artık her seviye makineyi 800ms değil, sadece 500ms hızlandırıyor!
                     this.machines[2].processingTime -= 500; 
-                    
                     this.updateResourceBars();
                     this.playSound('money');
                     
