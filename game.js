@@ -329,12 +329,14 @@ class MainScene extends Phaser.Scene {
             delay: this.spawnDelay, callback: this.spawnProduct, callbackScope: this, loop: true
         });
         
+        // --- DÜZELTİLDİ: Arızalar Artık Çok Daha Sık ve Kesin Çıkacak! ---
         this.breakdownEvent = this.time.addEvent({
-            delay: 15000, 
+            delay: 10000, // 15 saniyeden 10 saniyeye düşürüldü
             callback: () => {
                 if (!this.gameStarted || this.isPaused || this.isGameOver) return;
                 
-                if (Math.random() > 0.6) {
+                // %40 ihtimalden %70 ihtimale çıkarıldı! Andrew affetmez.
+                if (Math.random() > 0.3) {
                     const workingMachines = this.machines.filter(m => !m.isBroken);
                     if (workingMachines.length > 0) {
                         const target = Phaser.Utils.Array.GetRandom(workingMachines);
@@ -434,17 +436,15 @@ class MainScene extends Phaser.Scene {
         this.breakdownEvent.paused = true; 
         this.gameStarted = false;
 
-        // --- 1. EKRAN: ANDREW'UN MEKTUBU ---
         this.introContainer = this.add.container(0, 0);
         this.introContainer.setDepth(2000);
 
         const darkOverlay = this.add.rectangle(0, 0, width, height, 0x000000, 0.8).setOrigin(0);
         
-        // Eskimiş Kağıt Görünümü (Vintage Manila/Parchment)
         const letterBg = this.add.rectangle(width / 2, height / 2, 700, 600, 0xe8dcc7);
         letterBg.setStrokeStyle(4, 0x5c4033);
         const letterInnerLine = this.add.rectangle(width / 2, height / 2, 680, 580);
-        letterInnerLine.setStrokeStyle(2, 0x8b7355, 0.6); // İç çerçeve
+        letterInnerLine.setStrokeStyle(2, 0x8b7355, 0.6); 
 
         const patronImg = this.add.image(width / 2 + 200, height / 2 - 50, 'patron');
         patronImg.setScale(0.35);
@@ -469,17 +469,15 @@ class MainScene extends Phaser.Scene {
             this.playSound('click'); 
             this.introContainer.destroy();
             
-            // --- 2. EKRAN: OYUNUN İŞLEYİŞİ ---
             this.howToContainer = this.add.container(0, 0);
             this.howToContainer.setDepth(2000);
             
             const overlay2 = this.add.rectangle(0, 0, width, height, 0x000000, 0.8).setOrigin(0);
             
-            // Eskimiş Kağıt Görünümü (Vintage Manila/Parchment)
             const parchmentBg = this.add.rectangle(width / 2, height / 2, 700, 640, 0xe8dcc7);
             parchmentBg.setStrokeStyle(4, 0x5c4033);
             const parchmentInnerLine = this.add.rectangle(width / 2, height / 2, 680, 620);
-            parchmentInnerLine.setStrokeStyle(2, 0x8b7355, 0.6); // İç çerçeve
+            parchmentInnerLine.setStrokeStyle(2, 0x8b7355, 0.6); 
 
             const howToTitle = this.add.text(width / 2, height / 2 - 270, this.t('howToTitle'), {
                 fontFamily: 'Courier', fontSize: '28px', color: '#d35400', fontStyle: 'bold'
@@ -490,7 +488,6 @@ class MainScene extends Phaser.Scene {
                 wordWrap: { width: 620 }, align: 'left', lineSpacing: 10, fontStyle: 'bold'
             }).setOrigin(0.5, 0);
 
-            // Buton rahatlasın diye y=250'ye kadar indirildi!
             const startRealBtnBg = this.add.rectangle(width / 2, height / 2 + 250, 280, 50, 0x27ae60).setInteractive({ useHandCursor: true });
             startRealBtnBg.setStrokeStyle(2, 0x2ecc71);
             
@@ -883,8 +880,9 @@ class MainScene extends Phaser.Scene {
         overlay.setInteractive();
         this.tutorialPopup.add(overlay);
 
+        // DÜZELTİLDİ: Kutunun boyu uzatıldı! (460 -> 540)
         const modalWidth = 600;
-        const modalHeight = 460; 
+        const modalHeight = 540; 
         const modalX = width / 2 - modalWidth / 2;
         const modalY = height / 2 - modalHeight / 2;
 
@@ -905,11 +903,12 @@ class MainScene extends Phaser.Scene {
         }).setOrigin(0.5, 0);
         this.tutorialPopup.add(textBody);
 
-        const btn = this.add.rectangle(width / 2, modalY + 390, 200, 50, 0xe67e22);
+        // DÜZELTİLDİ: Buton aşağı çekildi! (390 -> 460)
+        const btn = this.add.rectangle(width / 2, modalY + 460, 200, 50, 0xe67e22);
         btn.setStrokeStyle(2, 0xd35400, 1);
         btn.setInteractive({ useHandCursor: true });
         
-        const btnText = this.add.text(width / 2, modalY + 390, this.t('understood'), {
+        const btnText = this.add.text(width / 2, modalY + 460, this.t('understood'), {
             fontSize: '20px', color: '#ffffff', fontStyle: 'bold'
         }).setOrigin(0.5);
 
