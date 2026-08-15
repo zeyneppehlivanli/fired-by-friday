@@ -466,9 +466,10 @@ class MainScene extends Phaser.Scene {
             fontFamily: 'Courier', fontSize: '27px', color: '#c0392b', fontStyle: 'bold'
         }).setOrigin(0.5);
 
-        const letterBody = this.add.text(width / 2 - 100, height / 2 - 190, this.t('welcomeBody'), {
+        // Adjusting x coordinate from width / 2 - 100 to width / 2 - 60 for better indentation
+        const letterBody = this.add.text(width / 2 - 60, height / 2 - 190, this.t('welcomeBody'), {
             fontFamily: 'Courier', fontSize: '19px', color: '#2c3e50',
-            wordWrap: { width: 480 }, align: 'left', lineSpacing: 10, fontStyle: 'bold'
+            wordWrap: { width: 440 }, align: 'left', lineSpacing: 10, fontStyle: 'bold'
         }).setOrigin(0.5, 0);
 
         const startBtnBg = this.add.rectangle(width / 2, height / 2 + 230, 250, 50, 0xe74c3c).setInteractive({ useHandCursor: true });
@@ -497,9 +498,10 @@ class MainScene extends Phaser.Scene {
                 fontFamily: 'Courier', fontSize: '28px', color: '#d35400', fontStyle: 'bold'
             }).setOrigin(0.5);
 
+            // Using width / 2 for center alignment with slightly reduced wordWrap width
             const howToBody = this.add.text(width / 2, height / 2 - 210, this.t('howToBody'), {
                 fontFamily: 'Courier', fontSize: '18px', color: '#2c3e50',
-                wordWrap: { width: 620 }, align: 'left', lineSpacing: 10, fontStyle: 'bold'
+                wordWrap: { width: 580 }, align: 'left', lineSpacing: 10, fontStyle: 'bold'
             }).setOrigin(0.5, 0);
 
             const startRealBtnBg = this.add.rectangle(width / 2, height / 2 + 250, 280, 50, 0x27ae60).setInteractive({ useHandCursor: true });
