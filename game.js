@@ -1,4 +1,4 @@
-// --- ÇOK DİLLİ METİN SÖZLÜĞÜ (DICTIONARY) ---
+// --- MULTILINGUAL DICTIONARY ---
 const TEXTS = {
     tr: {
         budget: "BÜTÇE: ",
@@ -125,6 +125,7 @@ const TEXTS = {
 class MainScene extends Phaser.Scene {
     constructor() {
         super('MainScene');
+        // Simulation Metrics & Resource Counters
         this.productCount = 0;
         this.machines = [];
         this.spawnEvent = null;
@@ -165,6 +166,7 @@ class MainScene extends Phaser.Scene {
         const width = this.scale.width;
         const height = this.scale.height;
 
+        // Language Selection UI
         if (!this.currentLang) {
             this.add.rectangle(0, 0, width, height, 0x1a252f).setOrigin(0);
             
@@ -193,6 +195,7 @@ class MainScene extends Phaser.Scene {
             return; 
         }
 
+        // Environment Setup
         this.bgImage = this.add.image(width / 2, height / 2, 'bg');
         this.bgImage.setDisplaySize(width, height); 
         this.bgImage.depth = 0;
@@ -211,6 +214,7 @@ class MainScene extends Phaser.Scene {
         const shadow = this.add.ellipse(640, 570, 90, 25, 0x000000, 0.4);
         shadow.depth = 9; 
 
+        // Conveyor Belt Graphics
         const beltGraphics = this.add.graphics();
         beltGraphics.lineStyle(16, 0x1a252f, 1);
         beltGraphics.depth = 1;
@@ -223,6 +227,7 @@ class MainScene extends Phaser.Scene {
         beltGraphics.lineTo(1280, 450);
         beltGraphics.strokePath();
 
+        // Machine Generation & Queue Logistics
         const machinePositions = [
             { x: 150, y: 450 }, { x: 350, y: 150 }, { x: 640, y: 150 },
             { x: 930, y: 150 }, { x: 1130, y: 450 }
@@ -252,11 +257,13 @@ class MainScene extends Phaser.Scene {
                 fontSize: '15px', fontFamily: 'Courier', color: '#2ecc71', fontStyle: 'bold' 
             }).setOrigin(0.5).setDepth(8);
 
+            // Manual Intervention Mechanic (Overdrive)
             machine.setInteractive({ useHandCursor: true });
             machine.on('pointerdown', () => {
                 if (this.isPaused || this.isGameOver) return;
                 
                 if (machineData.isBroken) {
+                    // Corrective maintenance cost logic
                     if (this.budget >= 100) {
                         this.budget -= 100;
                         this.updateResourceBars();
@@ -267,6 +274,7 @@ class MainScene extends Phaser.Scene {
                         this.playSound('money');
                         this.showFloatingText(pos.x, pos.y - 50, this.t('repairCost'), '#2ecc71');
                         
+                        // Resume processing from buffer
                         if (machineData.queue.length > 0 && !machineData.busy) {
                             const nextProduct = machineData.queue.shift();
                             this.startProcessing(machineData, nextProduct, machineData.id);
@@ -277,6 +285,7 @@ class MainScene extends Phaser.Scene {
                     return;
                 }
                 
+                // Overdrive logic: Trade off sanity for immediate WIP reduction
                 if (machineData.queue.length >= 5) {
                     this.sanity -= 10; 
                     this.updateResourceBars();
@@ -308,6 +317,7 @@ class MainScene extends Phaser.Scene {
             led.fillCircle(ledX, ledY, 11);
             led.depth = 6;
 
+            // M-3 is explicitly designed as the bottleneck in the simulation
             const machineData = {
                 id: i + 1, x: pos.x, y: pos.y, width: 100, height: 150,
                 busy: false, 
@@ -325,17 +335,18 @@ class MainScene extends Phaser.Scene {
 
         this.products = this.add.group();
         
+        // Factory Production Initialization
         this.spawnEvent = this.time.addEvent({
             delay: this.spawnDelay, callback: this.spawnProduct, callbackScope: this, loop: true
         });
         
-        // --- DENGELENDİ: 15 saniyede bir %50 ihtimal! ---
+        // RNG Breakdown Event: Simulates machine failure probability (50% chance every 15s)
         this.breakdownEvent = this.time.addEvent({
             delay: 15000, 
             callback: () => {
                 if (!this.gameStarted || this.isPaused || this.isGameOver) return;
                 
-                if (Math.random() > 0.5) { // %50 Şans
+                if (Math.random() > 0.5) { 
                     const workingMachines = this.machines.filter(m => !m.isBroken);
                     if (workingMachines.length > 0) {
                         const target = Phaser.Utils.Array.GetRandom(workingMachines);
@@ -348,6 +359,7 @@ class MainScene extends Phaser.Scene {
 
         this.productSpeed = 2; 
 
+        // Human Factors mechanics: Passive sanity regeneration
         this.time.addEvent({
             delay: 5000,
             callback: () => {
@@ -363,6 +375,7 @@ class MainScene extends Phaser.Scene {
             loop: true
         });
 
+        // UI Initialization
         const barWidth = 200;
         const barHeight = 20;
         const barSpacing = 20;
@@ -435,6 +448,7 @@ class MainScene extends Phaser.Scene {
         this.breakdownEvent.paused = true; 
         this.gameStarted = false;
 
+        // Onboarding Screens: Corporate Memo Initialization
         this.introContainer = this.add.container(0, 0);
         this.introContainer.setDepth(2000);
 
@@ -452,7 +466,6 @@ class MainScene extends Phaser.Scene {
             fontFamily: 'Courier', fontSize: '27px', color: '#c0392b', fontStyle: 'bold'
         }).setOrigin(0.5);
 
-        // --- GÖRSEL DÜZELTME: Yazılar biraz büyüdü (19px) ve satır arası açıldı ---
         const letterBody = this.add.text(width / 2 - 100, height / 2 - 190, this.t('welcomeBody'), {
             fontFamily: 'Courier', fontSize: '19px', color: '#2c3e50',
             wordWrap: { width: 480 }, align: 'left', lineSpacing: 10, fontStyle: 'bold'
@@ -469,6 +482,7 @@ class MainScene extends Phaser.Scene {
             this.playSound('click'); 
             this.introContainer.destroy();
             
+            // Onboarding Screens: Mechanics Tutorial Initialization
             this.howToContainer = this.add.container(0, 0);
             this.howToContainer.setDepth(2000);
             
@@ -534,12 +548,14 @@ class MainScene extends Phaser.Scene {
         this.queueText.setText(`${this.t('queue')}${totalQueue}`);
         this.updateStateMachine(totalQueue);
 
+        // System crash limits (Line Down scenario)
         const maxQueue = Math.max(...this.machines.map(m => m.queue.length));
         if (maxQueue >= 8 && !this.isPaused) {
             this.triggerCrisis();
             return;
         }
 
+        // Throughput Analysis
         let allClear = true;
         this.machines.forEach(m => {
             if (m.queue.length > 2) allClear = false; 
@@ -579,6 +595,7 @@ class MainScene extends Phaser.Scene {
             }
         });
 
+        // Evaluate continuous flow efficiency
         if (allClear) {
             this.flowTimer += delta;
             if (this.flowTimer >= 20000 && !this.isFlowState) {
@@ -597,6 +614,7 @@ class MainScene extends Phaser.Scene {
         this.flowBar.fillRoundedRect(this.scale.width - 250, this.scale.height - 50, 200 * flowProgress, 15, 5);
 
 
+        // Routing and processing loop for products
         this.products.children.each((product) => {
             const data = product.productData;
 
@@ -629,6 +647,7 @@ class MainScene extends Phaser.Scene {
                     }
                 }
 
+                // Check intersection with machine stations for processing allocation
                 this.machines.forEach((machine, index) => {
                     const machineIndex = index + 1;
                     
@@ -636,6 +655,7 @@ class MainScene extends Phaser.Scene {
                         Math.abs(product.x - machine.x) < 40 && 
                         Math.abs(product.y - machine.y) < 40) {
                         
+                        // Buffer logic: Shift to WIP queue if machine is busy
                         if (machine.busy || machine.isBroken) {
                             data.state = 'waiting';
                             machine.queue.push(product);
@@ -1150,6 +1170,7 @@ class MainScene extends Phaser.Scene {
         const startX = 50;
         const startY = 550;
 
+        // Upgrade Interface Panel
         const panelBg = this.add.graphics();
         panelBg.fillStyle(0x1a1a1a, 0.85);
         panelBg.fillRoundedRect(startX, startY, 400, 150, 10);
@@ -1161,6 +1182,7 @@ class MainScene extends Phaser.Scene {
             fontSize: '16px', color: '#f1c40f', fontStyle: 'bold'
         }).setOrigin(0.5).setDepth(21);
 
+        // Economic Parameters for Capacity Investments
         this.upgrades = {
             m3: { level: 0, max: 3, costs: [800, 1500, 2500] },
             auto: { level: 0, max: 3, costs: [1000, 1800, 3000] },
@@ -1168,12 +1190,14 @@ class MainScene extends Phaser.Scene {
         };
         this.sanityPenalty = 30; 
 
+        // Initialization of Tooltip logic for ROI descriptions
         this.tooltipText = this.add.text(0, 0, "", {
             fontSize: '14px', fontFamily: 'Courier', color: '#f1c40f', fontStyle: 'bold',
             backgroundColor: 'rgba(0,0,0,0.9)', padding: { x: 10, y: 10 },
             wordWrap: { width: 280 }
         }).setDepth(500).setOrigin(0, 0.5).setVisible(false);
 
+        // Upgrade Button: M-3 Capacity Investment
         const btn1 = this.add.rectangle(startX + 200, startY + 50, 360, 30, 0x2c3e50).setInteractive({ useHandCursor: true });
         btn1.depth = 21;
         const txt1 = this.add.text(startX + 200, startY + 50, `${this.t('m3Upgrade')} [${this.t('lvl')} 0] (${this.upgrades.m3.costs[0]}$)`, { fontSize: '14px', color: '#ffffff' }).setOrigin(0.5).setDepth(22);
@@ -1207,6 +1231,7 @@ class MainScene extends Phaser.Scene {
             }
         });
 
+        // Upgrade Button: Belt Speed Optimization
         const btn2 = this.add.rectangle(startX + 200, startY + 90, 360, 30, 0x2c3e50).setInteractive({ useHandCursor: true });
         btn2.depth = 21;
         const txt2 = this.add.text(startX + 200, startY + 90, `${this.t('autoUpgrade')} [${this.t('lvl')} 0] (${this.upgrades.auto.costs[0]}$)`, { fontSize: '14px', color: '#ffffff' }).setOrigin(0.5).setDepth(22);
@@ -1251,6 +1276,7 @@ class MainScene extends Phaser.Scene {
             }
         });
 
+        // Upgrade Button: Human Factors / Passive Regeneration
         const btn3 = this.add.rectangle(startX + 200, startY + 130, 360, 30, 0x2c3e50).setInteractive({ useHandCursor: true });
         btn3.depth = 21;
         const txt3 = this.add.text(startX + 200, startY + 130, `${this.t('coffeeUpgrade')} [${this.t('lvl')} 0] (${this.upgrades.coffee.costs[0]}$)`, { fontSize: '14px', color: '#ffffff' }).setOrigin(0.5).setDepth(22);
