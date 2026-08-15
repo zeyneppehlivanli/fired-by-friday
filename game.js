@@ -329,13 +329,13 @@ class MainScene extends Phaser.Scene {
             delay: this.spawnDelay, callback: this.spawnProduct, callbackScope: this, loop: true
         });
         
-        // --- DENGELENDİ: Arıza süresi ve ihtimali %60'a ve 12 saniyeye çekildi ---
+        // --- DENGELENDİ: 15 saniyede bir %50 ihtimal! ---
         this.breakdownEvent = this.time.addEvent({
-            delay: 12000, 
+            delay: 15000, 
             callback: () => {
                 if (!this.gameStarted || this.isPaused || this.isGameOver) return;
                 
-                if (Math.random() > 0.4) { // 1.0 - 0.4 = 0.60 (%60 Şans)
+                if (Math.random() > 0.5) { // %50 Şans
                     const workingMachines = this.machines.filter(m => !m.isBroken);
                     if (workingMachines.length > 0) {
                         const target = Phaser.Utils.Array.GetRandom(workingMachines);
@@ -452,9 +452,10 @@ class MainScene extends Phaser.Scene {
             fontFamily: 'Courier', fontSize: '27px', color: '#c0392b', fontStyle: 'bold'
         }).setOrigin(0.5);
 
+        // --- GÖRSEL DÜZELTME: Yazılar biraz büyüdü (19px) ve satır arası açıldı ---
         const letterBody = this.add.text(width / 2 - 100, height / 2 - 190, this.t('welcomeBody'), {
-            fontFamily: 'Courier', fontSize: '17px', color: '#2c3e50',
-            wordWrap: { width: 440 }, align: 'left', lineSpacing: 8, fontStyle: 'bold'
+            fontFamily: 'Courier', fontSize: '19px', color: '#2c3e50',
+            wordWrap: { width: 480 }, align: 'left', lineSpacing: 10, fontStyle: 'bold'
         }).setOrigin(0.5, 0);
 
         const startBtnBg = this.add.rectangle(width / 2, height / 2 + 230, 250, 50, 0xe74c3c).setInteractive({ useHandCursor: true });
@@ -879,7 +880,6 @@ class MainScene extends Phaser.Scene {
         overlay.setInteractive();
         this.tutorialPopup.add(overlay);
 
-        // --- HİZALAMA ÇÖZÜLDÜ: Kutunun yüksekliği ve butonu ayarladık ---
         const modalWidth = 600;
         const modalHeight = 500; 
         const modalX = width / 2 - modalWidth / 2;
