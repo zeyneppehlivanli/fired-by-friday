@@ -12,6 +12,9 @@ const TEXTS = {
         m3Upgrade: "M-3 Turbo",
         autoUpgrade: "Bant Hızı",
         coffeeUpgrade: "Kahve Makinesi",
+        m3Desc: "M-3 makinesinin işlem süresini kalıcı olarak hızlandırır (Darboğazı rahatlatır).",
+        autoDesc: "Banta yeni ürün gelme hızını artırır (Daha hızlı üretim, daha fazla risk!).",
+        coffeeDesc: "Her 5 saniyede bir Akıl Sağlığını pasif olarak yeniler. Hayat kurtarır!",
         lvl: "Lvl",
         maxLvl: "MAX SEVİYE",
         insufficientBudget: "YETERSİZ BÜTÇE!",
@@ -69,6 +72,9 @@ const TEXTS = {
         m3Upgrade: "M-3 Turbo",
         autoUpgrade: "Belt Speed",
         coffeeUpgrade: "Coffee Machine",
+        m3Desc: "Permanently speeds up M-3's processing time (Relieves the bottleneck).",
+        autoDesc: "Increases the rate of new products arriving on the belt (Faster production, more risk!).",
+        coffeeDesc: "Passively restores Sanity every 5 seconds. A lifesaver!",
         lvl: "Lvl",
         maxLvl: "MAX LEVEL",
         insufficientBudget: "NOT ENOUGH BUDGET!",
@@ -272,7 +278,6 @@ class MainScene extends Phaser.Scene {
                 }
                 
                 if (machineData.queue.length >= 5) {
-                    // DENGELENDİ: Artık Overdrive çok yorucu (-10)
                     this.sanity -= 10; 
                     this.updateResourceBars();
                     
@@ -434,26 +439,29 @@ class MainScene extends Phaser.Scene {
         this.introContainer.setDepth(2000);
 
         const darkOverlay = this.add.rectangle(0, 0, width, height, 0x000000, 0.8).setOrigin(0);
-        const letterBg = this.add.rectangle(width / 2, height / 2, 680, 480, 0xfdf6e3);
+        
+        // HİZALAMA ÇÖZÜLDÜ: Kağıt boyu 480'den 540'a çıkarıldı.
+        const letterBg = this.add.rectangle(width / 2, height / 2, 680, 540, 0xfdf6e3);
         letterBg.setStrokeStyle(4, 0xbdc3c7);
 
-        const patronImg = this.add.image(width / 2 + 200, height / 2 - 30, 'patron');
+        const patronImg = this.add.image(width / 2 + 200, height / 2 - 50, 'patron');
         patronImg.setScale(0.35);
 
-        const letterTitle = this.add.text(width / 2, height / 2 - 190, this.t('welcomeTitle'), {
+        // HİZALAMA ÇÖZÜLDÜ: Y koordinatları yukarı çekildi.
+        const letterTitle = this.add.text(width / 2, height / 2 - 220, this.t('welcomeTitle'), {
             fontFamily: 'Courier', fontSize: '27px', color: '#c0392b', fontStyle: 'bold'
         }).setOrigin(0.5);
 
-        // HİZALAMA ÇÖZÜLDÜ: setOrigin(0.5, 0) yapıldı ve Y konumu aşağı çekildi.
-        const letterBody = this.add.text(width / 2 - 100, height / 2 - 140, this.t('welcomeBody'), {
+        const letterBody = this.add.text(width / 2 - 100, height / 2 - 170, this.t('welcomeBody'), {
             fontFamily: 'Courier', fontSize: '17px', color: '#2c3e50',
             wordWrap: { width: 420 }, align: 'left', lineSpacing: 8, fontStyle: 'bold'
         }).setOrigin(0.5, 0);
 
-        const startBtnBg = this.add.rectangle(width / 2, height / 2 + 180, 250, 50, 0xe74c3c).setInteractive({ useHandCursor: true });
+        // HİZALAMA ÇÖZÜLDÜ: Buton iyice aşağı (200) çekildi
+        const startBtnBg = this.add.rectangle(width / 2, height / 2 + 200, 250, 50, 0xe74c3c).setInteractive({ useHandCursor: true });
         startBtnBg.setStrokeStyle(2, 0xc0392b);
         
-        const startBtnText = this.add.text(width / 2, height / 2 + 180, this.t('nextBtn'), {
+        const startBtnText = this.add.text(width / 2, height / 2 + 200, this.t('nextBtn'), {
             fontSize: '20px', color: '#ffffff', fontStyle: 'bold'
         }).setOrigin(0.5);
 
@@ -466,23 +474,26 @@ class MainScene extends Phaser.Scene {
             this.howToContainer.setDepth(2000);
             
             const overlay2 = this.add.rectangle(0, 0, width, height, 0x000000, 0.8).setOrigin(0);
-            const parchmentBg = this.add.rectangle(width / 2, height / 2, 700, 480, 0xf4e5c2);
+            
+            // HİZALAMA ÇÖZÜLDÜ: Kağıt boyu 480'den 560'a çıkarıldı.
+            const parchmentBg = this.add.rectangle(width / 2, height / 2, 700, 560, 0xf4e5c2);
             parchmentBg.setStrokeStyle(4, 0xd35400);
 
-            const howToTitle = this.add.text(width / 2, height / 2 - 190, this.t('howToTitle'), {
+            // HİZALAMA ÇÖZÜLDÜ: Y koordinatları yukarı çekildi.
+            const howToTitle = this.add.text(width / 2, height / 2 - 230, this.t('howToTitle'), {
                 fontFamily: 'Courier', fontSize: '30px', color: '#d35400', fontStyle: 'bold'
             }).setOrigin(0.5);
 
-            // HİZALAMA ÇÖZÜLDÜ: setOrigin(0.5, 0) yapıldı ve Y konumu başlığın altından başlatıldı.
-            const howToBody = this.add.text(width / 2, height / 2 - 130, this.t('howToBody'), {
+            const howToBody = this.add.text(width / 2, height / 2 - 180, this.t('howToBody'), {
                 fontFamily: 'Courier', fontSize: '18px', color: '#2c3e50',
-                wordWrap: { width: 620 }, align: 'left', lineSpacing: 12, fontStyle: 'bold'
+                wordWrap: { width: 620 }, align: 'left', lineSpacing: 10, fontStyle: 'bold'
             }).setOrigin(0.5, 0);
 
-            const startRealBtnBg = this.add.rectangle(width / 2, height / 2 + 180, 280, 50, 0x27ae60).setInteractive({ useHandCursor: true });
+            // HİZALAMA ÇÖZÜLDÜ: Buton iyice aşağı (220) çekildi
+            const startRealBtnBg = this.add.rectangle(width / 2, height / 2 + 220, 280, 50, 0x27ae60).setInteractive({ useHandCursor: true });
             startRealBtnBg.setStrokeStyle(2, 0x2ecc71);
             
-            const startRealBtnText = this.add.text(width / 2, height / 2 + 180, this.t('startWork'), {
+            const startRealBtnText = this.add.text(width / 2, height / 2 + 220, this.t('startWork'), {
                 fontSize: '22px', color: '#ffffff', fontStyle: 'bold'
             }).setOrigin(0.5);
 
@@ -888,7 +899,6 @@ class MainScene extends Phaser.Scene {
         }).setOrigin(0.5);
         this.tutorialPopup.add(title);
         
-        // HİZALAMA ÇÖZÜLDÜ: setOrigin(0.5, 0)
         const textBody = this.add.text(width / 2, modalY + 110, this.t('tutorialBody'), {
             fontSize: '18px', color: '#ffffff', fontStyle: 'bold', align: 'center', wordWrap: { width: 520 }, lineSpacing: 15
         }).setOrigin(0.5, 0);
@@ -1129,7 +1139,6 @@ class MainScene extends Phaser.Scene {
             fontFamily: 'Courier', fontSize: '32px', color: '#27ae60', fontStyle: 'bold'
         }).setOrigin(0.5).setDepth(2002);
 
-        // HİZALAMA ÇÖZÜLDÜ: setOrigin(0.5, 0)
         this.add.text(width / 2, height / 2 - 120, this.t('victoryBody'), {
             fontFamily: 'Courier', fontSize: '20px', color: '#2c3e50',
             wordWrap: { width: 600 }, align: 'center', lineSpacing: 10, fontStyle: 'bold'
@@ -1161,9 +1170,24 @@ class MainScene extends Phaser.Scene {
         };
         this.sanityPenalty = 30; 
 
+        // YENİ: AÇIKLAMA BALONCUĞU (TOOLTIP) OLUŞTURULUYOR
+        this.tooltipText = this.add.text(0, 0, "", {
+            fontSize: '14px', fontFamily: 'Courier', color: '#f1c40f', fontStyle: 'bold',
+            backgroundColor: 'rgba(0,0,0,0.9)', padding: { x: 10, y: 10 },
+            wordWrap: { width: 280 }
+        }).setDepth(500).setOrigin(0, 0.5).setVisible(false);
+
+        // --- BUTON 1: M3 TURBO ---
         const btn1 = this.add.rectangle(startX + 200, startY + 50, 360, 30, 0x2c3e50).setInteractive({ useHandCursor: true });
         btn1.depth = 21;
         const txt1 = this.add.text(startX + 200, startY + 50, `${this.t('m3Upgrade')} [${this.t('lvl')} 0] (${this.upgrades.m3.costs[0]}$)`, { fontSize: '14px', color: '#ffffff' }).setOrigin(0.5).setDepth(22);
+
+        btn1.on('pointerover', () => {
+            this.tooltipText.setText(this.t('m3Desc'));
+            this.tooltipText.setPosition(startX + 390, startY + 50); // Butonun tam sağında belirir
+            this.tooltipText.setVisible(true);
+        });
+        btn1.on('pointerout', () => this.tooltipText.setVisible(false));
 
         btn1.on('pointerdown', () => {
             let up = this.upgrades.m3;
@@ -1187,9 +1211,17 @@ class MainScene extends Phaser.Scene {
             }
         });
 
+        // --- BUTON 2: BANT HIZI ---
         const btn2 = this.add.rectangle(startX + 200, startY + 90, 360, 30, 0x2c3e50).setInteractive({ useHandCursor: true });
         btn2.depth = 21;
         const txt2 = this.add.text(startX + 200, startY + 90, `${this.t('autoUpgrade')} [${this.t('lvl')} 0] (${this.upgrades.auto.costs[0]}$)`, { fontSize: '14px', color: '#ffffff' }).setOrigin(0.5).setDepth(22);
+
+        btn2.on('pointerover', () => {
+            this.tooltipText.setText(this.t('autoDesc'));
+            this.tooltipText.setPosition(startX + 390, startY + 90);
+            this.tooltipText.setVisible(true);
+        });
+        btn2.on('pointerout', () => this.tooltipText.setVisible(false));
 
         btn2.on('pointerdown', () => {
             let up = this.upgrades.auto;
@@ -1224,9 +1256,17 @@ class MainScene extends Phaser.Scene {
             }
         });
 
+        // --- BUTON 3: KAHVE MAKİNESİ ---
         const btn3 = this.add.rectangle(startX + 200, startY + 130, 360, 30, 0x2c3e50).setInteractive({ useHandCursor: true });
         btn3.depth = 21;
         const txt3 = this.add.text(startX + 200, startY + 130, `${this.t('coffeeUpgrade')} [${this.t('lvl')} 0] (${this.upgrades.coffee.costs[0]}$)`, { fontSize: '14px', color: '#ffffff' }).setOrigin(0.5).setDepth(22);
+
+        btn3.on('pointerover', () => {
+            this.tooltipText.setText(this.t('coffeeDesc'));
+            this.tooltipText.setPosition(startX + 390, startY + 130);
+            this.tooltipText.setVisible(true);
+        });
+        btn3.on('pointerout', () => this.tooltipText.setVisible(false));
 
         btn3.on('pointerdown', () => {
             let up = this.upgrades.coffee;
