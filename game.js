@@ -329,14 +329,13 @@ class MainScene extends Phaser.Scene {
             delay: this.spawnDelay, callback: this.spawnProduct, callbackScope: this, loop: true
         });
         
-        // --- DÜZELTİLDİ: Arızalar Artık Çok Daha Sık ve Kesin Çıkacak! ---
+        // --- DENGELENDİ: Arıza süresi ve ihtimali %60'a ve 12 saniyeye çekildi ---
         this.breakdownEvent = this.time.addEvent({
-            delay: 10000, // 15 saniyeden 10 saniyeye düşürüldü
+            delay: 12000, 
             callback: () => {
                 if (!this.gameStarted || this.isPaused || this.isGameOver) return;
                 
-                // %40 ihtimalden %70 ihtimale çıkarıldı! Andrew affetmez.
-                if (Math.random() > 0.3) {
+                if (Math.random() > 0.4) { // 1.0 - 0.4 = 0.60 (%60 Şans)
                     const workingMachines = this.machines.filter(m => !m.isBroken);
                     if (workingMachines.length > 0) {
                         const target = Phaser.Utils.Array.GetRandom(workingMachines);
@@ -880,9 +879,9 @@ class MainScene extends Phaser.Scene {
         overlay.setInteractive();
         this.tutorialPopup.add(overlay);
 
-        // DÜZELTİLDİ: Kutunun boyu uzatıldı! (460 -> 540)
+        // --- HİZALAMA ÇÖZÜLDÜ: Kutunun yüksekliği ve butonu ayarladık ---
         const modalWidth = 600;
-        const modalHeight = 540; 
+        const modalHeight = 500; 
         const modalX = width / 2 - modalWidth / 2;
         const modalY = height / 2 - modalHeight / 2;
 
@@ -903,12 +902,11 @@ class MainScene extends Phaser.Scene {
         }).setOrigin(0.5, 0);
         this.tutorialPopup.add(textBody);
 
-        // DÜZELTİLDİ: Buton aşağı çekildi! (390 -> 460)
-        const btn = this.add.rectangle(width / 2, modalY + 460, 200, 50, 0xe67e22);
+        const btn = this.add.rectangle(width / 2, modalY + 430, 200, 50, 0xe67e22);
         btn.setStrokeStyle(2, 0xd35400, 1);
         btn.setInteractive({ useHandCursor: true });
         
-        const btnText = this.add.text(width / 2, modalY + 460, this.t('understood'), {
+        const btnText = this.add.text(width / 2, modalY + 430, this.t('understood'), {
             fontSize: '20px', color: '#ffffff', fontStyle: 'bold'
         }).setOrigin(0.5);
 
